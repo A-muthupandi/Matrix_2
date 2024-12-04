@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        
+        .container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: auto;
+            height: 100vh;
+        }
+        input{
+            position: absolute;
+            width: 200px;
+        }
+        .div{
+            border: 10px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: auto;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+    <input type="number" id="matrix">
+    <div class="container" id="container">
+
+    </div>
+</body>
+<script>
+    let matrix = document.getElementById('matrix');
+let container = document.getElementById('container');
+let value;
+let count = 0;
+let div;
+
+matrix.addEventListener('keyup', function (event) {
+    if (event.key === 'Enter') {
+        value = Number(matrix.value);
+        count++;
+        if (!value || value <= 0) {
+            alert('Please enter a valid number');
+        } else {
+            if(div) {
+                container.removeChild(div);
+            }
+            div = document.createElement('div');
+            div.style.width = 'auto';
+            div.style.background = 'red';
+            div.style.height = 'auto';
+            div.classList.add('div');
+
+            div.style.display = 'grid';
+            div.style.gridTemplateColumns = `repeat(${value}, 1fr)`; 
+            div.style.gridTemplateRows = `repeat(${value}, 1fr)`; 
+            div.style.gridGap = '5px'; 
+            let square = value * value;
+            for (let i = 0; i < square; i++) {
+                let span1 = document.createElement('span');
+                span1.style.height = '50px';
+                span1.style.width = '50px';
+                span1.style.background = 'blue';
+                span1.style.display = 'inline-block';
+                div.appendChild(span1);
+            }
+            container.appendChild(div);
+            matrix.value = '';
+            console.log(value);
+        }
+    }
+});
+
+</script>
+
+</html>
