@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        
         .container{
             display: flex;
             align-items: center;
@@ -13,37 +12,44 @@
             flex-direction: column;
             width: auto;
             height: 100vh;
+            
         }
         input{
             position: absolute;
             width: 200px;
         }
         .div{
-            border: 10px solid black;
+            border: 10px solid white;
             display: flex;
             align-items: center;
             justify-content: center;
             height: auto;
             width: auto;
+            
+        }
+        .div span{
+            display: grid;;
+            place-items: center;
         }
     </style>
 </head>
 <body>
-    <input type="number" id="matrix">
     <div class="container" id="container">
 
     </div>
 </body>
-<script>
-    let matrix = document.getElementById('matrix');
+<script>2
+    let matrix = prompt("Enter a number");
+    let bomb = prompt("Enter a number of bombs");
+    let bvalue;
 let container = document.getElementById('container');
 let value;
 let count = 0;
 let div;
-
-matrix.addEventListener('keyup', function (event) {
-    if (event.key === 'Enter') {
-        value = Number(matrix.value);
+let span;
+        value = Number(matrix);
+        bvalue = Number(bomb);
+        console.log(bvalue)
         count++;
         if (!value || value <= 0) {
             alert('Please enter a valid number');
@@ -53,30 +59,48 @@ matrix.addEventListener('keyup', function (event) {
             }
             div = document.createElement('div');
             div.style.width = 'auto';
-            div.style.background = 'red';
+            div.style.background = 'white';
             div.style.height = 'auto';
             div.classList.add('div');
 
             div.style.display = 'grid';
             div.style.gridTemplateColumns = `repeat(${value}, 1fr)`; 
             div.style.gridTemplateRows = `repeat(${value}, 1fr)`; 
-            div.style.gridGap = '5px'; 
+            div.style.gridGap = '2px'; 
             let square = value * value;
+            let bsquare = [];
+            while (bsquare.length < bvalue) {
+                let random = Math.floor(Math.random() * square);
+                if (!bsquare.includes(random)) {
+                    bsquare.push(random);
+                }
+            }
             for (let i = 0; i < square; i++) {
-                let span1 = document.createElement('span');
-                span1.style.height = '50px';
-                span1.style.width = '50px';
-                span1.style.background = 'blue';
-                span1.style.display = 'inline-block';
-                div.appendChild(span1);
+    let span1 = document.createElement('span'); 
+    span1.style.height = '45px';
+    span1.style.width = '45px';
+    span1.style.background = '#777';
+    span1.style.display = 'flex';
+    span1.style.justifyContent = 'center';
+    span1.style.alignItems = 'center';
+    span1.textContent = ''; 
+    let isBomb = bsquare.includes(i + 1);
+    span1.dataset.Bomb = isBomb ? '*' : '0'; 
+    
+    span1.addEventListener('click', function () {
+        if (isBomb) {
+            alert("Bomb is clicked!");
+            const allSpans = div.querySelectorAll('span');
+            allSpans.forEach(span => {
+                span.textContent = span.dataset.Bomb;
+            });
+        }
+    });
+    div.appendChild(span1); 
+}
+        console.log(bsquare);
             }
             container.appendChild(div);
             matrix.value = '';
-            console.log(value);
-        }
-    }
-});
-
 </script>
-
 </html>
