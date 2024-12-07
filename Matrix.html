@@ -38,69 +38,58 @@
 
     </div>
 </body>
-<script>2
-    let matrix = prompt("Enter a number");
-    let bomb = prompt("Enter a number of bombs");
-    let bvalue;
-let container = document.getElementById('container');
-let value;
-let count = 0;
-let div;
-let span;
-        value = Number(matrix);
-        bvalue = Number(bomb);
-        console.log(bvalue)
-        count++;
-        if (!value || value <= 0) {
-            alert('Please enter a valid number');
-        } else {
-            if(div) {
-                container.removeChild(div);
-            }
-            div = document.createElement('div');
-            div.style.width = 'auto';
-            div.style.background = 'white';
-            div.style.height = 'auto';
-            div.classList.add('div');
+<script>
+    let matrix = prompt("Enter grid size (e.g., 5 for a 5x5 grid):");
+let bomb = prompt("Enter number of bombs:");
 
-            div.style.display = 'grid';
-            div.style.gridTemplateColumns = `repeat(${value}, 1fr)`; 
-            div.style.gridTemplateRows = `repeat(${value}, 1fr)`; 
-            div.style.gridGap = '2px'; 
-            let square = value * value;
-            let bsquare = [];
-            while (bsquare.length < bvalue) {
-                let random = Math.floor(Math.random() * square);
-                if (!bsquare.includes(random)) {
-                    bsquare.push(random);
-                }
-            }
-            for (let i = 0; i < square; i++) {
-    let span1 = document.createElement('span'); 
-    span1.style.height = '45px';
+let container = document.getElementById('container');
+let value = Number(matrix);
+let bvalue = Number(bomb);
+
+if (!value || value <= 0) {
+    alert('Please enter a valid number for the grid size!');
+} 
+else {
+    let div = document.createElement('div');
+    div.style.display = 'grid';
+    div.style.gridTemplateColumns = `repeat(${value}, 1fr)`;
+    div.style.gridGap = '2px';
+    container.appendChild(div);
+
+    let square = value * value;
+    let bsquare = [];
+    while (bsquare.length < bvalue) {
+        let random = Math.floor(Math.random() * square);
+        if (!bsquare.includes(random)) {
+            bsquare.push(random);
+        }
+    }
+    let revealed = Array(square).fill(false);
+    for (let i = 0; i < square; i++) {
+        let span1 = document.createElement('span');
+        span1.style.height = '45px';
     span1.style.width = '45px';
     span1.style.background = '#777';
     span1.style.display = 'flex';
     span1.style.justifyContent = 'center';
     span1.style.alignItems = 'center';
     span1.textContent = ''; 
-    let isBomb = bsquare.includes(i + 1);
-    span1.dataset.Bomb = isBomb ? '*' : '0'; 
-    
-    span1.addEventListener('click', function () {
-        if (isBomb) {
-            alert("Bomb is clicked!");
-            const allSpans = div.querySelectorAll('span');
-            allSpans.forEach(span => {
-                span.textContent = span.dataset.Bomb;
-            });
-        }
-    });
-    div.appendChild(span1); 
-}
-        console.log(bsquare);
+        
+        span1.addEventListener('click', function () {
+            if (revealed[i]) return; 
+            revealed[i] = true;
+
+            if (bsquare.includes(i)) {
+                alert("Bomb is clicked!");
+                const allSpans = div.querySelectorAll('span');
+                allSpans.forEach((span, index) => {
+                span.textContent = bsquare.includes(index) ? '*' : '0';
+                span.style.background = bsquare.includes(index) ? '#f00' : '#ccc';
+                }); 
             }
-            container.appendChild(div);
-            matrix.value = '';
+        });
+        div.appendChild(span1);
+    }
+}
 </script>
 </html>
