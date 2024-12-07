@@ -47,12 +47,13 @@ let value = Number(matrix);
 let bvalue = Number(bomb);
 
 if (!value || value <= 0) {
-    alert('Please enter a valid number for the grid size!');
+    alert('Please enter a valid number');
 } 
 else {
     let div = document.createElement('div');
     div.style.display = 'grid';
     div.style.gridTemplateColumns = `repeat(${value}, 1fr)`;
+    div.style.gridTemplateRows = `repeat(${value}, 1fr)`;
     div.style.gridGap = '2px';
     container.appendChild(div);
 
