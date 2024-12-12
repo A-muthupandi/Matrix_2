@@ -5,92 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        .container{
+        #container{
             display: flex;
-            align-items: center;
             justify-content: center;
-            flex-direction: column;
-            width: auto;
+            align-items: center;
             height: 100vh;
-            
         }
-        input{
-            position: absolute;
-            width: 200px;
-        }
-        .div{
-            border: 10px solid white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: auto;
-            width: auto;
-            
-        }
-        .div span{
-            display: grid;;
-            place-items: center;
+        div span{
+            border: 1px solid black;
         }
     </style>
 </head>
 <body>
-    <div class="container" id="container">
-
-    </div>
+    <div id="container"></div>
 </body>
 <script>
-    let matrix = prompt("Enter number of matrix");
-let bomb = prompt("Enter number of bombs:");
-
-let container = document.getElementById('container');
-let value = Number(matrix);
-let bvalue = Number(bomb);
-
-if (!value || value <= 0) {
-    alert('Please enter a valid number');
-} 
-else {
-    let div = document.createElement('div');
-    div.style.display = 'grid';
-    div.style.gridTemplateColumns = `repeat(${value}, 1fr)`;
-    div.style.gridTemplateRows = `repeat(${value}, 1fr)`;
-    div.style.gridGap = '2px';
-    container.appendChild(div);
-
-    let square = value * value;
-    let bsquare = [];
-    while (bsquare.length < bvalue) {
-        let random = Math.floor(Math.random() * square);
-        if (!bsquare.includes(random)) {
-            bsquare.push(random);
-        }
+    let set = 0;
+    let matrix;
+    start();
+    function start() {
+    if(set > 0) {
+        matrix = '0';
     }
-    let revealed = Array(square).fill(false);
-    for (let i = 0; i < square; i++) {
-        let span1 = document.createElement('span');
-        span1.style.height = '45px';
-    span1.style.width = '45px';
-    span1.style.background = '#777';
-    span1.style.display = 'flex';
-    span1.style.justifyContent = 'center';
-    span1.style.alignItems = 'center';
-    span1.textContent = ''; 
-        
-        span1.addEventListener('click', function () {
-            if (revealed[i]) return; 
-            revealed[i] = true;
-
-            if (bsquare.includes(i)) {
-                alert("Bomb is clicked!");
-                const allSpans = div.querySelectorAll('span');
-                allSpans.forEach((span, index) => {
-                span.textContent = bsquare.includes(index) ? '*' : '0';
-                span.style.background = bsquare.includes(index) ? '#f00' : '#ccc';
-                }); 
-            }
-        });
-        div.appendChild(span1);
+    matrix =  Number(prompt("Enter a number"))
+    let container = document.getElementById('container');
+    if(!matrix || matrix <= 0) {
+        alert("Enter a valid number");
+        set++;
+        start();
+    }
+    else{
+        let div = document.createElement('div');
+        div.style.height = 'auto';
+        div.style.width = 'auto';
+        div.style.display = 'grid';
+        div.style.background = 'red';
+        div.style.gridTemplateColumns = `repeat(${matrix},1fr)`;
+        div.style.gap = '4px';
+        for(i = 0;i< matrix;i++) {
+        let span = document.createElement('span');
+        span.style.padding = '20px';
+        span.style.width = '20px';
+        span.style.background = 'violet';
+        div.appendChild(span);
+        }
+        div.classList.add('boxes');
+    container.appendChild(div);
+    console.log(matrix);
+    console.log(typeof(matrix));
     }
 }
+
 </script>
 </html>
