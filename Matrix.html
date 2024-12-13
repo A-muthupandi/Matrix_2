@@ -30,6 +30,8 @@
     let bomb;
     let random;
     let r;
+    let end;
+    let spans;
     start();
     function start() {
     if(set > 0) {
@@ -58,35 +60,41 @@
         span.style.padding = '20px';
         span.style.height = '20px';
         span.style.width = '20px';
-        span.style.background = 'violet';
-        if(array[0][i][1].includes(i)) {
-            span.textContent = '*';
-        }
-        else {
-        span.textContent = '0';
-        }
-        span.style.color = 'violet';
+        span.style.background = 'blue';
+
+        span.style.color = 'white';
         console.log(arr[0][i]);
         
         div.appendChild(span);
         span.classList.add('boxes');
+        
+        end = false;
         }
     container.appendChild(div);
-    let spans = [...document.querySelectorAll('.boxes')];
+     spans = [...document.querySelectorAll('.boxes')];
     spans.forEach((span,index) => {
         span.addEventListener('click',function() {
             let ch = index;
             if(array[0][ch][1].includes(index)) {
                 alert("Bomb is clicked");
-                Over();
+                spans.textContent = '';
+               matrixText();
             }
         })
     })
+    }
+    }
+function matrixText() {
+    for(i = 0;i < spans.length;i++) {
+        if(array[0][i][1].includes(i)) {
+            spans[i].textContent = '*';
+        }
+        else{
+            spans[i].textContent = '0';
+        }
+    }
 }
-}
-function Over() {
-    span.style.color = 'black';
-}
+
 function findMatrix() {
     let matrix2 = matrix * matrix;
     array = [];
@@ -112,7 +120,7 @@ function findMatrix() {
         j--;
      }
     }
-    
+    console.log(random);
     return array;
 }
 </script>
