@@ -15,6 +15,9 @@
             text-align: center;
             border: 1px solid black;
         }
+        span:hover{
+            opacity: 0.6;
+        }
     </style>
 </head>
 <body>
@@ -23,6 +26,7 @@
 <script>
     let set = 0;
     let matrix;
+    let matrix2;
     let span;
     let div;
     let array;
@@ -30,8 +34,12 @@
     let bomb;
     let random;
     let r;
-    let end;
+    let sindex;
     let spans;
+    let uarray;
+    let around;
+    let count;
+    let c;
     start();
     function start() {
     if(set > 0) {
@@ -53,9 +61,10 @@
         div.style.background = 'red';
         div.style.gridTemplateColumns = `repeat(${matrix},1fr)`;
         div.style.gap = '4px';
+        
         let arr = findMatrix();
-
-        for(i = 0;i < matrix * matrix;i++) {
+        for(i = 0;i < matrix;i++) {
+            for(j = 0;j < matrix;j++) {
         span = document.createElement('span');
         span.style.padding = '20px';
         span.style.height = '20px';
@@ -63,54 +72,74 @@
         span.style.background = 'blue';
 
         span.style.color = 'white';
-        console.log(arr[0][i]);
-        
+       
         div.appendChild(span);
         span.classList.add('boxes');
-        
-        end = false;
+            }
         }
     container.appendChild(div);
-     spans = [...document.querySelectorAll('.boxes')];
-    spans.forEach((span,index) => {
+     spans = document.querySelectorAll('.boxes');
+     spans.textContent = '';
+
+     spans.forEach((span,index) => {
         span.addEventListener('click',function() {
-            let ch = index;
-            if(array[0][ch][1].includes(index)) {
-                alert("Bomb is clicked");
-                spans.textContent = '';
-               matrixText();
-            }
-        })
-    })
-    }
-    }
-function matrixText() {
-    for(i = 0;i < spans.length;i++) {
-        if(array[0][i][1].includes(i)) {
-            spans[i].textContent = '*';
+            r = Math.floor(index / matrix);
+            c = index % matrix;
+
+             if (array[r][c] === '*') {
+            alert('Bomb is clicked!');
+            span.textContent = '*'; 
+            spans.forEach((span, index) => {
+              const r = Math.floor(index / matrix);
+              const c = index % matrix;
+                if (array[r][c] === '*') {
+                     span.textContent = '*';
         }
-        else{
-            spans[i].textContent = '0';
+    });
+        }    else {
+                    blankbox();
         }
+        });
+     })
+    };
+}
+
+function blankbox() {
+    count = 0;
+    around = spans[0];
+    let spect = matrix;
+    if(spans[0].textContent === '*') {
+        console.log('hi');
+        return '';
+    }
+    else{
+    if(spans[1].textContent === '*') {
+        console.log('confirm');
+        count++;
+    }
+    if(spans[spect].textContent === '*') {count++;}
+    if( spans[spect + 1].textContent === '*') {count++;}
+    spans[0].textContent = count;
     }
 }
 
 function findMatrix() {
-    let matrix2 = matrix * matrix;
     array = [];
-    sub = [];
-    let count = 0;
-    for(i = 0; i < matrix2; i++) {
-        r = Array(2);
-        r[0] = i;
-        r[1] = [];
-        sub.push(r);
-    }
-    array.push(sub);
-    for(j = 0;j < bomb;j++) {
-     random = Math.floor(Math.random() * matrix2);
-     if(!array[0][random][1].includes(random)) {
-        array[0][random][1].push(random);
+    matrix2 = matrix * matrix;
+    for(i = 0;i < matrix;i++) {
+        array[i] = [];
+        for(j = 0;j < matrix;j++) {
+            array[i][j] = '0';
+        }
+        }
+        let count = 0;
+        for(k = 0;k < bomb;k++) {
+        random = Math.floor(Math.random() * matrix2);
+         r = Math.floor(random / matrix);
+         c = random % matrix;
+        console.log(r,c);
+        if(array[r][c] !== '*') {
+        array[r][c] = '*';
         count++;
      }
      if(count === bomb || count >= bomb) {
@@ -120,8 +149,9 @@ function findMatrix() {
         j--;
      }
     }
-    console.log(random);
+    console.log(array);
     return array;
-}
+    }
+
 </script>
 </html>
