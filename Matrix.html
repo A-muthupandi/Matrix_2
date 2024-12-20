@@ -40,6 +40,7 @@
     let around;
     let count;
     let c;
+    
     start();
     function start() {
     if(set > 0) {
@@ -61,7 +62,6 @@
         div.style.background = 'red';
         div.style.gridTemplateColumns = `repeat(${matrix},1fr)`;
         div.style.gap = '4px';
-        
         let arr = findMatrix();
         for(i = 0;i < matrix;i++) {
             for(j = 0;j < matrix;j++) {
@@ -70,9 +70,7 @@
         span.style.height = '20px';
         span.style.width = '20px';
         span.style.background = 'blue';
-
         span.style.color = 'white';
-       
         div.appendChild(span);
         span.classList.add('boxes');
             }
@@ -80,7 +78,7 @@
     container.appendChild(div);
      spans = document.querySelectorAll('.boxes');
      spans.textContent = '';
-
+    
      spans.forEach((span,index) => {
         span.addEventListener('click',function() {
             r = Math.floor(index / matrix);
@@ -89,38 +87,34 @@
              if (array[r][c] === '*') {
             alert('Bomb is clicked!');
             span.textContent = '*'; 
-            spans.forEach((span, index) => {
+            spans.forEach((s, index) => {
               const r = Math.floor(index / matrix);
               const c = index % matrix;
                 if (array[r][c] === '*') {
-                     span.textContent = '*';
+                     s.textContent = '*';
         }
     });
         }    else {
-                    blankbox();
+            blankbox(span,index,r,c);
         }
         });
      })
     };
 }
 
-function blankbox() {
+function blankbox(span,index,r,c) {
     count = 0;
-    around = spans[0];
-    let spect = matrix;
-    if(spans[0].textContent === '*') {
-        console.log('hi');
-        return '';
+    for (let i = r - 1; i <= r + 1; i++) {
+        for (let j = c - 1; j <= c + 1; j++) {
+            if(i < 0 || j < 0 || i >= matrix || j >= matrix) {
+                continue;
+            }
+            if (array[i][j] === '*') {
+                count++;
+            }
+        }
     }
-    else{
-    if(spans[1].textContent === '*') {
-        console.log('confirm');
-        count++;
-    }
-    if(spans[spect].textContent === '*') {count++;}
-    if( spans[spect + 1].textContent === '*') {count++;}
-    spans[0].textContent = count;
-    }
+span.textContent = count;
 }
 
 function findMatrix() {
