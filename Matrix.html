@@ -1,38 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
-        #container{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        
-        div span{
-            text-align: center;
-            border: 1px solid black;
-        }
-        span:hover{
-            opacity: 0.6;
-        }
-        div[class = 'end']{
-            display: flex;
-            position: absolute;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+      #container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      div span {
+        text-align: center;
+        border: 1px solid black;
+      }
+      span:hover {
+        opacity: 0.6;
+      }
+      div[class="end"] {
+        display: flex;
+        position: absolute;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+      .cbox{
+        display: grid;
+        width: auto;
+        height: auto;
+        background: red;
+        gap: 4px;
+      }
+      .boxes{
+        padding: 20px;
+        height: 20px;
+        width: 20px;
+        background: blue;
+        color: white;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div id="container"></div>
-</body>
-<script>
-    
+  </body>
+  <script>
     let set = 0;
     let matrix;
     let matrix2;
@@ -43,7 +56,7 @@
     let bomb;
     let random;
     let r;
-    let spans2D;
+    let val;
     let sindex;
     let spans;
     let uarray;
@@ -51,124 +64,133 @@
     let sum;
     let count;
     let c;
-    console.log('h')
+    console.log("h");
     start();
     function start() {
-    if(set > 0) {
+      if (set > 0) {
         matrix = 0;
-    }
-    matrix =  Number(prompt("Enter a box size"));
-    bomb =  Number(prompt("Enter a number of  bombs"));
-    let container = document.getElementById('container');
-    if(!matrix || matrix <= 0 || !bomb || bomb <= 0) {
+      }
+      matrix = Number(prompt("Enter a box size"));
+      bomb = Number(prompt("Enter a number of  bombs"));
+      let container = document.getElementById("container");
+      if (!matrix || matrix <= 0 || !bomb || bomb <= 0) {
         alert("Enter a valid number");
         set++;
         start();
-    }
-    else{
-        div = document.createElement('div');
-        div.style.height = 'auto';
-        div.style.width = 'auto';
-        div.style.display = 'grid';
-        div.style.background = 'red';
+      } else {
+        div = document.createElement("div");
+        div.classList.add('cbox');
+        div.style.display = "grid";
         div.style.gridTemplateColumns = `repeat(${matrix},1fr)`;
-        div.style.gap = '4px';
         let arr = findMatrix();
-        for(i = 0;i < matrix;i++) {
-            for(j = 0;j < matrix;j++) {
-        span = document.createElement('span');
-        span.style.padding = '20px';
-        span.style.height = '20px';
-        span.style.width = '20px';
-        span.style.background = 'blue';
-        span.style.color = 'white';
-        div.appendChild(span);
-        span.classList.add('boxes');
-            }
+        for (i = 0; i < matrix; i++) {
+          for (j = 0; j < matrix; j++) {
+            span = document.createElement("span");
+            div.appendChild(span);
+            span.classList.add("boxes");
+          }
         }
-    container.appendChild(div);
-     spans = document.querySelectorAll('.boxes');
-     spans.textContent = '';
-     
-     spans.forEach((span,index) => {
-        span.addEventListener('click',function() {
+        container.appendChild(div);
+        spans = document.querySelectorAll(".boxes");
+        spans.textContent = "";
+
+        spans.forEach((span, index) => {
+          span.addEventListener("click", function () {
             r = Math.floor(index / matrix);
             c = index % matrix;
 
-             if (array[r][c] === '*') {
-            alert('Bomb is clicked!');
-            span.textContent = '*'; 
-            spans.forEach((s, index) => {
-              const r = Math.floor(index / matrix);
-              const c = index % matrix;
-                if (array[r][c] === '*') {
-                     s.textContent = '*';
-        }
-    });
-        }    else {
-            span.textContent = array[r][c];
-        }
-        });
-     })
-    };
-}
+            if (array[r][c] === "*") {
+              alert("Bomb is clicked!");
+              span.textContent = "*";
+              spans.forEach((s, index) => {
+                const r = Math.floor(index / matrix);
+                const c = index % matrix;
+                if (array[r][c] === "*") {
+                  s.textContent = "*";
+                }
+              });
+            } else {
+              span.textContent = array[r][c];
+            }
+            
+            if(array[r][c] === '0'){
+              for(i = r-1;i <= r+1;i++){
+                for(j = c-1;j <= c+1;j++){
+                  if(i < 0 || j < 0)continue;
+                  if(array[i][j] == '*') continue;
+                  if(i > array.length || j > array[i].length) continue;
+                  spans[i * matrix + j].textContent = array[i][j];
+                }
+              }
+            }
 
-function findMatrix() {
-    array = [];
-    matrix2 = matrix * matrix;
-    for(i = 0;i < matrix;i++) {
-        array[i] = [];
-        for(j = 0;j < matrix;j++) {
-            array[i][j] = '0';
-        }
-        }
-        let count = 0;
-        sum = 0;
-        for(k = 0;k < bomb;k++) {
-        random = Math.floor(Math.random() * matrix2);
-         r = Math.floor(random / matrix);
-         c = random % matrix;
-        if(array[r][c] !== '*') {
-        array[r][c] = '*';
-        count++;
-     }
-     if(count === bomb || count >= bomb) {
-        break;
-     }
-     else{
-        k--;
-     }
+          });
+        });
+      }
     }
-    countBomb();
-    console.log(array);
-    return array;
+
+    function findMatrix() {
+      array = [];
+      matrix2 = matrix * matrix;
+      for (i = 0; i < matrix; i++) {
+        array[i] = [];
+        for (j = 0; j < matrix; j++) {
+          array[i][j] = "0";
+        }
+      }
+      let count = 0;
+
+      for (k = 0; k < bomb; k++) {
+        random = Math.floor(Math.random() * matrix2);
+        r = Math.floor(random / matrix);
+        c = random % matrix;
+        if (array[r][c] !== "*") {
+          array[r][c] = "*";
+          count++;
+        }
+        if (count === bomb || count >= bomb) {
+          break;
+        } else {
+          k--;
+        }
+      }
+      countBomb();
+      console.log(array);
+      return array;
     }
 
     function countBomb() {
-        for (let r = 0; r < matrix; r++) {
+      for (let r = 0; r < matrix; r++) {
         for (let c = 0; c < matrix; c++) {
-            let sum = 0;
-            if (array[r][c] === '*') continue;
-            for (let i = -1; i <= 1; i++) {
-                for (let j = -1; j <= 1; j++) {
-                    if (i === 0 && j === 0) continue;
-                    const nr = r + i;
-                    const nc = c + j;
-                    
-                    if (nr >= 0 && nc >= 0 && nr < matrix  && nc < matrix && array[nr][nc] === '*') sum++;
-                }
+          let sum = 0;
+          if (array[r][c] === "*") continue;
+          for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+              if (i === 0 && j === 0) continue;
+              const nr = r + i;
+              const nc = c + j;
+              if (
+                nr >= 0 &&
+                nc >= 0 &&
+                nr < matrix &&
+                nc < matrix &&
+                array[nr][nc] === "*"
+              )
+                sum++;
             }
-            array[r][c] = sum.toString();
+          }
+
+          array[r][c] = sum.toString();
         }
+      }
     }
-    }
- function gameOver() {
-let restart = confirm("If you want to continue?");
-    if(restart) {
+    function gameOver() {
+      let restart = confirm("If you want to continue?");
+      if (restart) {
         div.remove();
-        document.body.style.opacity = '0.9';
+        document.body.style.opacity = "0.9";
         start();
+      }
     }
- }
-</script>
+  </script>
 </html>
