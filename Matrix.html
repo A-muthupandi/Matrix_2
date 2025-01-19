@@ -34,12 +34,18 @@
         gap: 4px;
       }
       .boxes{
-        padding: 20px;
-        height: 20px;
-        width: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        height: 10px;
+        width: 10px;
         background: blue;
         color: white;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 12px;
       }
+      
     </style>
   </head>
   <body>
@@ -64,7 +70,7 @@
     let sum;
     let count;
     let c;
-    console.log("h");
+    
     start();
     function start() {
       if (set > 0) {
@@ -91,6 +97,7 @@
           }
         }
         container.appendChild(div);
+      
         spans = document.querySelectorAll(".boxes");
         spans.textContent = "";
 
@@ -103,25 +110,20 @@
               alert("Bomb is clicked!");
               span.textContent = "*";
               spans.forEach((s, index) => {
-                const r = Math.floor(index / matrix);
-                const c = index % matrix;
-                if (array[r][c] === "*") {
-                  s.textContent = "*";
-                }
+                  let r = Math.floor(index / matrix);
+                  let c = index % matrix;
+                  s.textContent = array[r][c];
               });
-            } else {
-              span.textContent = array[r][c];
             }
-            
-            if(array[r][c] === '0'){
-              for(i = r-1;i <= r+1;i++){
-                for(j = c-1;j <= c+1;j++){
-                  if(i < 0 || j < 0)continue;
-                  if(array[i][j] == '*') continue;
-                  if(i > array.length || j > array[i].length) continue;
-                  spans[i * matrix + j].textContent = array[i][j];
-                }
-              }
+              else if(array[r][c] === '0'){
+              spans.forEach((box,index) => {
+                let r = Math.floor(index / matrix);
+                let c = index % matrix;
+                if(array[r][c] != '*') box.textContent = array[r][c];
+              })
+            }
+            else {
+              span.textContent = array[r][c];
             }
 
           });
